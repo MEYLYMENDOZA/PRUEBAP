@@ -75,8 +75,3 @@ if opcion in ["Ambos", "San Juan de Lurigancho"]:
 # Mostrar mapa
 st.markdown("### 🌐 Mapa interactivo")
 st_folium(m, width=800, height=600)
-
-
-# Mostrar mapa
-st.markdown("### 🌐 Mapa interactivo")
-st_folium(m, width=800, height=600)
