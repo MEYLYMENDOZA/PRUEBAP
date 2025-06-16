@@ -33,22 +33,22 @@ m = folium.Map(location=[df_puntos.latitud.mean(), df_puntos.longitud.mean()], z
 def conectar_puntos_prim(df):
     # Almacenar los lugares como una lista de tuplas (nombre_lugar, latitud, longitud)
     lugares = df[["nombre_lugar", "latitud", "longitud"]].values
-    
+    num_lugares = len(lugares)
+
     # Inicializar las estructuras para Prim
-    visitados = [False] * len(lugares)  # Lista de nodos visitados
+    visitados = [False] * num_lugares  # Lista de nodos visitados
     conexiones = []  # Lista de conexiones de la forma (distancia, nodo_1, nodo_2)
     
     # Comenzamos con el primer nodo
     visitados[0] = True  # Marcamos el primer nodo como visitado
-    edges = []
     
     # Mientras haya nodos no visitados
-    while len(conexiones) < len(lugares) - 1:
+    while len(conexiones) < num_lugares - 1:
         min_dist = float('inf')
         u, v = -1, -1
-        for i in range(len(lugares)):
+        for i in range(num_lugares):
             if visitados[i]:
-                for j in range(len(lugares)):
+                for j in range(num_lugares):
                     if not visitados[j]:  # Solo considerar nodos no visitados
                         dist = geodesic((lugares[i][1], lugares[i][2]), (lugares[j][1], lugares[j][2])).meters
                         if dist < min_dist:
@@ -71,6 +71,11 @@ if opcion in ["Ambos", "La Victoria"]:
 if opcion in ["Ambos", "San Juan de Lurigancho"]:
     df_lurigancho.apply(lambda row: folium.Marker([row.latitud, row.longitud], popup=row.nombre_lugar).add_to(m), axis=1)
     conectar_puntos_prim(df_lurigancho)
+
+# Mostrar mapa
+st.markdown("### 🌐 Mapa interactivo")
+st_folium(m, width=800, height=600)
+
 
 # Mostrar mapa
 st.markdown("### 🌐 Mapa interactivo")
